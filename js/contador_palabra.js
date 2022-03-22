@@ -1,18 +1,33 @@
 //contar todas las palabras 
 function contadorDePalabras(frase) {
-    //frase = frase.replace(/^\s*|\s*$/g, '');
+    // frase = frase.replace(/^\s*|\s*$/g, ' ');
     frase = frase.replace(/[ ]{2,}/g, ' ');
-    frase = frase.replace(/ \n /g, ' \n');
-    frase = frase.replace(/\n/g, ' \n');
+    frase = frase.replace(/ \n /g, ' ');
+    frase = frase.replace(/[.!,]/g, ' ');
+    frase = frase.replace(/^ /, ' ');
+    frase = frase.replace(/ $/, ' ');
+    frase = frase.replace(/[ ]+/g, ' ');
+
+
+    /* 
+primerBlanco = /^ /
+ultimoBlanco = / $/
+variosBlancos = /[ ]+/g
+    */
 
     frase = frase.trim();
     //console.log(frase);
+    let contador = 0;
+
     let arrayPalabras = "";
     let porPalabras = frase.split(' ');
-    for (let i = 0; i < frase.split(' ').length; i++) {
-        // console.log(porPalabras[i]);
+    for (let i = 1; i < frase.split(' ').length; i++) {
+        console.log(frase.split[i], " mira aca");
+        contador++;
     }
-
+    console.log(porPalabras.length, " <=== esto es por palabra cant");
+    console.log(porPalabras, " <=== esto es por palabra");
+    console.log(contador, " <=== esto es por contador");
     return frase.split(' ').length;
 
 
@@ -32,9 +47,9 @@ function contarOcurrencia(frase, cantidadPalabras) {
     let arrayPAnteriores = [];
     let conteo;
     console.log(frase);
-    console.log(frase.split('').length + " leng de frase");
-    for (let i = 0; i < frase.split('').length; i++) {
-        //  console.log(frase.split('')[i]);
+    console.log(frase.split(' ').length + " leng de frase");
+    for (let i = 0; i < frase.split(' ').length; i++) {
+        //  console.log(frase.split(' ')[i]);
         //console.log("+++++++++");
 
 
@@ -48,7 +63,7 @@ function contarOcurrencia(frase, cantidadPalabras) {
                 //console.log((frase.split(' ')[j]) + "%%frase.split en i%%");
                 //console.log("+++++++++");
                 //  if (arrayPAnteriores)
-                if (palabraAnterior == frase.split('')[j]) {
+                if (palabraAnterior == frase.split(' ')[j]) {
                     //arrayResultado[i] = element;
 
                     // console.log("hay concidencia entre anterior " + palabraAnterior + frase.split(' ')[j]);

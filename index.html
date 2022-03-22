@@ -11,13 +11,22 @@
     <script src="js/contador_palabra.js"></script>
 </head>
 
-<body>
-    <H1>CONTADOR DE PALABRAS</H1>
-    <p>Escriba o inserte su texto</p>
+<body class="todo">
+    <div class="agrupar">
+        <div class="encabezado">
 
-    <textarea name="recolectorDatos" id="textoIngresado" class="areatexto" cols="100" rows="15"></textarea><br>
-    <button type="button" onclick="contarPalabras()">CONTAR</button>
+            <H1>CONTADOR DE PALABRAS</H1>
+        </div>
+        <div class="recuadro">
 
+            <textarea name="recolectorDatos" id="textoIngresado" class="areatexto" cols="100" rows="15">Escriba o inserte su texto</textarea><br>
+        </div>
+        <div class="cajaBoton">
+            <button type="button" class="btn" onclick="contarPalabras()">CONTAR</button>
+
+        </div>
+
+    </div>
 </body>
 
 </html>
