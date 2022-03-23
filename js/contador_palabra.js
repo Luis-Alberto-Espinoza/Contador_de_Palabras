@@ -1,19 +1,13 @@
 //contar todas las palabras 
 function contadorDePalabras(frase) {
-    // frase = frase.replace(/^\s*|\s*$/g, ' ');
     frase = frase.replace(/[ ]{2,}/g, ' ');
-    frase = frase.replace(/ \n /g, ' ');
+    frase = frase.replace(/\n{2,}/g, ' ');
     frase = frase.replace(/[.!,]/g, ' ');
     frase = frase.replace(/^ /, ' ');
     frase = frase.replace(/ $/, ' ');
     frase = frase.replace(/[ ]+/g, ' ');
 
 
-    /* 
-primerBlanco = /^ /
-ultimoBlanco = / $/
-variosBlancos = /[ ]+/g
-    */
 
     frase = frase.trim();
     //console.log(frase);
