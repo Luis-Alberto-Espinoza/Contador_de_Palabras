@@ -91,6 +91,10 @@ function contarOcurrencia(frase, cantidadPalabras) {
 
 }
 
+function limpiar() {
+    document.getElementById('textoIngresado').value = " ";
+
+}
 
 function contarPalabras() {
     let texto = document.getElementById('textoIngresado').value;
