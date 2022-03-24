@@ -1,53 +1,96 @@
 //contar todas las palabras 
 function contadorDePalabras(frase) {
-    frase = frase.replace(/[ ]{2,}/g, ' ');
-    frase = frase.replace(/\n{2,}/g, ' ');
+    /*EXPRESIONES REGULARES*/
+
+    /*Remplaza 1 o mas espacios en blanco por uno solo */
+    frase = frase.replace(/[ ]{1,}/g, ' ');
+
+    /* Remplaza 1 o mas saltos de linea por un espacio en blanco*/
+    frase = frase.replace(/\n{1,}/g, ' ');
+
+    /* Remplaza los signos ,.! por un espacio en blanco (dia!lluvioso = dia lluvios) */
     frase = frase.replace(/[.!,]/g, ' ');
-    frase = frase.replace(/^ /, ' ');
-    frase = frase.replace(/ $/, ' ');
+
+    /* Quita los espacios al inicio de la cadena */
+    frase = frase.replace(/^ /, '');
+
+    /* Quita los espacios al final de la cadena */
+    frase = frase.replace(/ $/, '');
+
+    /* Deja solo un espacio en blanco entre las palabras */
     frase = frase.replace(/[ ]+/g, ' ');
+
+    /* Quita los espacios iniciales y finales de toda la cadena */
     frase = frase.trim();
-    //console.log(frase);
-    let contador = 0;
-    let arrayPalabras = "";
-    let porPalabras = frase.split(' ');
-    for (let i = 1; i < frase.split(' ').length; i++) {
-        contador++;
-    }
-    return frase.split(' ').length;
+
+    return frase;
 }
 
-function contarOcurrencia(frase, cantidadPalabras) {
+function contarOcurrencia(frase) {
     let arrayResultado;
     let element;
-    let contador = 1;
+    let contadorPalabra = 0;
+    let contadorRepeticiones = 0;
     let palabraAnterior = "";
     let arrayPAnteriores = [];
     let conteo;
+
+
     for (let i = 0; i < frase.split(' ').length; i++) {
+        palabraAnterior = frase.split(' ')[i];
+        console.log('ESTO ES PALABRA ANTERIOR', palabraAnterior);
+        contadorRepeticiones = 0;
 
-        if (i > 0) {
-            for (let j = i + 1; j < frase.split(' ').length; j++) {
+        for (let j = i + 1; j < frase.split(' ').length; j++) {
 
-                if (palabraAnterior == frase.split(' ')[j]) {
-                    contador++;
+            if (palabraAnterior == frase.split(' ')[j]) {
+                if (contadorRepeticiones == 0) {
+
+
+                    arrayPAnteriores[contadorPalabra] = (palabraAnterior);
+
+                    contadorRepeticiones++;
+                    // console.log('length', arrayPAnteriores);
                 }
+
+                // console.log(j, "-- -- -- -- -- -- -- -- -- -", palabraAnterior);
+
+                // console.log(palabraAnterior, ' ante');
+                //console.log(frase.split(' ')[j], ' actual');
             }
+
         }
-        palabraAnterior = (frase.split(' ')[i]);
+        console.log('repe ', contadorRepeticiones);
+        // contadorRepeticiones = 0;
+        // console.log('este es el contador', contadorRepeticiones);
+
+        // palabraAnterior = (frase.split(' ')[i]);
+        contadorPalabra++
     }
-    console.log("se repite => " + contador + " La palabra=> " + palabraAnterior);
+    console.log('length', arrayPAnteriores);
+
+    // for (let i = 0; i < arrayPAnteriores.length; i++) {
+    //     console.log('esto es la palabra repe', arrayPAnteriores[i])
+
+    // }
 }
 
+/* Funcion para blanquear el cuadro de texto-text area */
 function limpiar() {
-    document.getElementById('textoIngresado').value = " ";
+    document.getElementById('textoIngresado').value = "";
 }
 
 function contarPalabras() {
+    console.log("--------------inicio de ejecucion---------------------");
+    /* Seguarda en texto lo que tenga el cuadro de texto */
     let texto = document.getElementById('textoIngresado').value;
 
-    let resultado = contadorDePalabras(texto);
-    console.log(resultado);
+    /* se manda el texto a validar */
+    texto = contadorDePalabras((texto));
 
-    contarOcurrencia(texto, resultado);
+    /* Se imprime por consola la cantidad de palabras */
+    console.log("La cantidad de palabras es:", texto.split(' ').length);
+
+    /* se envia el texto en minusculas para extraer la cant de palabras repetidas */
+    contarOcurrencia(texto.toLowerCase());
 }
