@@ -19,14 +19,52 @@
         </div>
         <div class="recuadro">
 
-            <textarea name="recolectorDatos" id="textoIngresado" class="areatexto" cols="100" rows="15">Escriba o inserte su texto</textarea><br>
+            <textarea name="recolectorDatos" id="textoIngresado" class="areatexto" cols="10" rows="15">Escriba o inserte su texto escriba inserte amigo como estas escriba</textarea><br>
         </div>
         <div class="cajaBoton">
             <button type="button" class="btn" onclick="limpiar()">LIMPIAR</button>
             <button type="button" class="btn" onclick="contarPalabras()">CONTAR</button>
 
         </div>
+        <br>
+        <div class="mostrarResultado">
+            <div class="resultado">
+                <table class="tabla">
+                    <tr>
+                        <td class="tituloTabla" colspan="2"></td>
+                        <h3>El recuento arrojo los siguientes datos:</h3>
+                    </tr>
+                    <tr>
+                        <td class="descripcionTabla">cantidad de palabras</td>
+                        <td class="resultadoTabla"></td>
+                    </tr>
+                    <tr>
+                        <td class="descripcionTabla">cantidad de caracteres</td>
+                        <td class="resultadoTabla"></td>
+                    </tr>
+                    <tr>
+                        <td class="descripcionTabla">oraciones</td>
+                        <td class="resultadoTabla"></td>
+                    </tr>
+                    <tr>
+                        <td class="descripcionTabla">parrafos</td>
+                        <td class="resultadoTabla"></td>
+                    </tr>
+                </table>
+                <br>
+                <table>
+                    <tr>
+                        <td class="tituloTablaPalabra" colspan="2"></td>
+                        <h3>las palabras mas repetidas son:</h3>
+                    </tr>
+                    <tr>
+                        <td class="descripcionTabla"></td>
+                        <td class="resultadoTabla"></td>
+                    </tr>
+                </table>
 
+            </div>
+        </div>
     </div>
 </body>
 
