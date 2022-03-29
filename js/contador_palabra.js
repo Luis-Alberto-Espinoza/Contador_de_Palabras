@@ -9,7 +9,7 @@ function contadorDePalabras(frase) {
     frase = frase.replace(/\n{1,}/g, ' ');
 
     /* Remplaza los signos ,.! por un espacio en blanco (dia!lluvioso = dia lluvios) */
-    frase = frase.replace(/[.!,]/g, ' ');
+    frase = frase.replace(/[.!¡?¿,-_-]/g, ' ');
 
     /* Quita los espacios al inicio de la cadena */
     frase = frase.replace(/^ /, '');
@@ -26,55 +26,63 @@ function contadorDePalabras(frase) {
     return frase;
 }
 
-function contarOcurrencia(frase) {
+function contarOcurrencia(myArray) {
     let arrayResultado;
     let element;
     let contadorPalabra = 0;
-    let contadorRepeticiones = 0;
+    let contadorRepeticiones = 1;
     let palabraAnterior = "";
     let arrayPAnteriores = [];
     let conteo;
 
+    for (let i = 0; i < myArray.length; i++) {
+        palabraAnterior = myArray[i].pala;
+        contadorRepeticiones = 1;
+        for (let j = i + 1; j < myArray.length - 1; j++) {
+            if (palabraAnterior == myArray[j].pala) {
 
-    for (let i = 0; i < frase.split(' ').length; i++) {
-        palabraAnterior = frase.split(' ')[i];
-        console.log('ESTO ES PALABRA ANTERIOR', palabraAnterior);
-        contadorRepeticiones = 0;
-
-        for (let j = i + 1; j < frase.split(' ').length; j++) {
-
-            if (palabraAnterior == frase.split(' ')[j]) {
-                if (contadorRepeticiones == 0) {
-
-
-                    arrayPAnteriores[contadorPalabra] = (palabraAnterior);
-
-                    contadorRepeticiones++;
-                    // console.log('length', arrayPAnteriores);
-                }
-
-                // console.log(j, "-- -- -- -- -- -- -- -- -- -", palabraAnterior);
-
-                // console.log(palabraAnterior, ' ante');
-                //console.log(frase.split(' ')[j], ' actual');
+                contadorRepeticiones++;
+            } else {
+                break;
             }
-
         }
-        console.log('repe ', contadorRepeticiones);
-        // contadorRepeticiones = 0;
-        // console.log('este es el contador', contadorRepeticiones);
-
-        // palabraAnterior = (frase.split(' ')[i]);
-        contadorPalabra++
+        if (contadorRepeticiones > 1) {
+            let repe = estaRepetido(arrayPAnteriores, palabraAnterior);
+            if (!repe) {
+                arrayPAnteriores[contadorPalabra] = { palabra: palabraAnterior, cant: contadorRepeticiones };
+                contadorPalabra++
+            }
+        }
     }
-    console.log('length', arrayPAnteriores);
-
-    // for (let i = 0; i < arrayPAnteriores.length; i++) {
-    //     console.log('esto es la palabra repe', arrayPAnteriores[i])
-
-    // }
+    arrayPAnteriores.sort((a, b) => {
+        if (a.cant == b.cant) {
+            return 0;
+        }
+        if (a.cant > b.cant) {
+            return -1;
+        }
+        return 1;
+    });
+    for (let i = 0; i < arrayPAnteriores.length; i++) {
+        console.log(arrayPAnteriores[i], "-*-*-*-*-*-");
+    }
 }
 
+function estaRepetido(arrayPAnteriores, palabraAnterior) {
+    let nueva = 0
+
+    for (let i = 0; i < arrayPAnteriores.length; i++) {
+        if (palabraAnterior == arrayPAnteriores[i].palabra) {
+            nueva++;
+        }
+
+    }
+    if (nueva > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
 /* Funcion para blanquear el cuadro de texto-text area */
 function limpiar() {
     document.getElementById('textoIngresado').value = "";
@@ -85,12 +93,40 @@ function contarPalabras() {
     /* Seguarda en texto lo que tenga el cuadro de texto */
     let texto = document.getElementById('textoIngresado').value;
 
+    const myArray = [];
+    var pala;
+    texto = texto.toLowerCase();
+    texto = texto.trim();
+
     /* se manda el texto a validar */
     texto = contadorDePalabras((texto));
 
+    console.log(texto);
+    for (let i = 0; i < texto.split(' ').length; i++) {
+        myArray[i] = { pala: texto.split(' ')[i] };
+    }
     /* Se imprime por consola la cantidad de palabras */
     console.log("La cantidad de palabras es:", texto.split(' ').length);
 
     /* se envia el texto en minusculas para extraer la cant de palabras repetidas */
-    contarOcurrencia(texto.toLowerCase());
+    // contarOcurrencia(texto.toLowerCase());
+
+
+    myArray.sort((a, b) => {
+        if (a.pala == b.pala) {
+            return 0;
+        }
+        if (a.pala < b.pala) {
+            return -1;
+        }
+        return 1;
+    });
+    (contarOcurrencia(myArray));
+}
+
+function contadoresco(myArray) {
+    myArray.sort((function(a, b) {
+        return a.pala - b.pala;
+    }));
+
 }
