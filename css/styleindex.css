@@ -43,3 +43,43 @@
 .cajaBoton {
     text-align: center;
 }
+
+.resultado {
+    display: flex;
+    justify-content: center;
+}
+
+.resultadoRepeticiones {
+    display: flex;
+    display: grid;
+    position: relative;
+    float: left;
+}
+
+.resultado2 {
+    display: flex;
+    display: grid;
+    position: relative;
+    float: left;
+}
+
+.tabla0 {
+    padding: 25px;
+    display: grid;
+}
+
+.classTd {
+    height: 35px;
+    font-size: 28px;
+    color: rgb(12, 3, 21);
+    padding: 5px;
+    text-align: center;
+}
+
+.classTdC {
+    height: 35px;
+    font-size: 28px;
+    color: rgb(12, 3, 21);
+    padding: 5px;
+    text-align: center;
+}

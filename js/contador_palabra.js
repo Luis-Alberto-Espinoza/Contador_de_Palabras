@@ -190,38 +190,27 @@ function agregarDatos(arrayPAnteriores, desde, hasta, elementoPadre) {
     const cuerpoTabla = document.createElement('tBody');
     let encabezado = document.createElement('tr');
 
-    let td0 = document.createElement('td');
-    td0.className = "classTd";
-    td0.innerText = ('PALABRAS');
-    encabezado.appendChild(td0);
-
-    td0 = document.createElement('td');
-    td0.className = "classTdC";
-    td0.innerText = ("REPETICIONES");
-    encabezado.appendChild(td0);
+    encabezado.appendChild(creadorCeldas('td', 'classTd', 'PALABRAS'));
+    encabezado.appendChild(creadorCeldas('td', 'classTdC', 'REPETICIONES'));
 
     cuerpoTabla.appendChild(encabezado);
 
     for (let i = desde; i < hasta; i++) {
-
         let fila = document.createElement('tr');
-
-        let td = document.createElement('td');
-        td.className = "classTd";
-        td.innerText = arrayPAnteriores[i].palabra;
-        fila.appendChild(td);
-
-        td = document.createElement('td');
-        td.className = "classTdC";
-        td.innerText = arrayPAnteriores[i].cant;
-        fila.appendChild(td);
-
+        fila.appendChild(creadorCeldas('td', 'classTdC', arrayPAnteriores[i].palabra));
+        fila.appendChild(creadorCeldas('td', 'classTdC', arrayPAnteriores[i].cant));
         cuerpoTabla.appendChild(fila);
     }
-
     mostrarResultados.appendChild(cuerpoTabla);
 
 
+}
+
+function creadorCeldas(elemento, clase, texto) {
+    let td = document.createElement(elemento);
+    td.className = clase;
+    td.innerText = (texto);
+    return td;
 }
 
 
