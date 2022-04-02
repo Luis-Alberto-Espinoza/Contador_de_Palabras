@@ -1,4 +1,11 @@
+let contador = 0;
+
 function contarPalabras() {
+    if (contador > 0) {
+        console.log("paso mas de una vez");
+        //cuerpoTabla.re;
+    }
+    contador++;
     console.log("--------------inicio de ejecucion---------------------");
     /* Seguarda en texto lo que tenga el cuadro de texto */
     let texto = document.getElementById('textoIngresado').value;
@@ -126,6 +133,7 @@ function contarOcurrencia(myArray) {
     for (let i = 0; i < arrayPAnteriores.length; i++) {
         console.log(arrayPAnteriores[i], "-*-*-*-*-*-");
     }
+    agregarDatos(arrayPAnteriores);
 }
 
 function estaRepetido(arrayPAnteriores, palabraAnterior) {
@@ -146,4 +154,93 @@ function estaRepetido(arrayPAnteriores, palabraAnterior) {
 /* Funcion para blanquear el cuadro de texto-text area */
 function limpiar() {
     document.getElementById('textoIngresado').value = "";
+}
+
+
+function agregarDatos(arrayPAnteriores) {
+    /*https://developer.mozilla.org/es/docs/Web/API/Document_Object_Model/Traversing_an_HTML_table_with_JavaScript_and_DOM_Interfaces */
+    /* https://lenguajejs.com/javascript/dom/crear-elementos-dom/ */
+    const mostrarResultados = document.getElementById('tablaXpalabra');
+    const cuerpoTabla = document.createElement('tBody');
+
+    let mitadMenos = (Math.round(arrayPAnteriores.length / 2));
+    let encabezado = document.createElement('tr');
+
+    let td0 = document.createElement('td');
+    td0.className = "classTd";
+    td0.innerText = ('PALABRAS');
+    encabezado.appendChild(td0);
+
+    td0 = document.createElement('td');
+    td0.className = "classTdC";
+    td0.innerText = ("REPETICIONES");
+    encabezado.appendChild(td0);
+
+    cuerpoTabla.appendChild(encabezado);
+
+    for (let i = 0; i < mitadMenos; i++) {
+
+        let fila = document.createElement('tr');
+
+        let td = document.createElement('td');
+        td.className = "classTd";
+        td.innerText = arrayPAnteriores[i].palabra;
+        fila.appendChild(td);
+
+        td = document.createElement('td');
+        td.className = "classTdC";
+        td.innerText = arrayPAnteriores[i].cant;
+        fila.appendChild(td);
+
+        cuerpoTabla.appendChild(fila);
+    }
+
+    mostrarResultados.appendChild(cuerpoTabla);
+
+    agregarDatos1(arrayPAnteriores);
+}
+
+function agregarDatos1(arrayPAnteriores) {
+    const mostrarResultados = document.getElementById('tablaXpalabra1');
+    const cuerpoTabla = document.createElement('tBody');
+
+    let mitadMas = (Math.round((arrayPAnteriores.length / 2)));
+
+    let encabezado = document.createElement('tr');
+
+    let td0 = document.createElement('td');
+    td0.className = "classTd";
+    td0.innerText = ('PALABRAS');
+    encabezado.appendChild(td0);
+
+    td0 = document.createElement('td');
+    td0.className = "classTdC";
+    td0.innerText = ("REPETICIONES");
+    encabezado.appendChild(td0);
+
+    cuerpoTabla.appendChild(encabezado);
+
+    for (let i = mitadMas; i < arrayPAnteriores.length; i++) {
+
+        let fila = document.createElement('tr');
+
+        let td = document.createElement('td');
+        td.className = "classTd";
+        td.innerText = arrayPAnteriores[i].palabra;
+        fila.appendChild(td);
+
+        td = document.createElement('td');
+        td.className = "classTdC";
+        td.innerText = arrayPAnteriores[i].cant;
+        fila.appendChild(td);
+
+        cuerpoTabla.appendChild(fila);
+    }
+
+    mostrarResultados.appendChild(cuerpoTabla);
+
+}
+
+function textoPrueba() {
+    let escrito = "¿Qué es Contador de palabras?\n    Contador de palabras y contador de caracteres es una herramienta que te permite contar la cantidad de palabras o de caracteres que posee un texto. Simplemente, debes posicionar el cursor dentro de la ventana y comenzar a escribir con el teclado. El sistema contará automáticamente la cantidad de palabras y caracteres que has ingresado. También es posible copiar y pegar un texto que hayas escrito fuera del sistema; automáticamente mostrará el recuento de palabras y caracteres del texto copiado.\n        Además, Contador de palabras y contador de caracteres posee dos botones sobre la derecha de la pantalla, los cuales te permiten borrar y contar, respectivamente. Verás que uno de ellos posee un icono de una papelera con el que podrás borrar todo el contenido de la ventana. El otro, que posee el icono de una flecha, te permite contar palabras y caracteres de lo que hayas escrito.\n        Saber el número de palabras o caracteres de un documento puede ser muy útil. Como ejemplo, si se le pide a un autor un mínimo o un máximo de palabras permitidas para escribir, el contador de palabras lo ayudará a saber si su artículo cumple con los requisitos.\nAdemás, el contador de palabras muestra automáticamente las diez palabras más utilizadas y la densidad de las mismas dentro del artículo que estás escribiendo. Esto te permite saber qué palabras utilizas con más frecuencia y en qué porcentaje las utilizas dentro del artículo. Esto te ayudará a evitar que utilices en exceso ciertas palabras en un texto y te permitirá asegurarte de que la distribución de las palabras clave coincide con lo que estás buscando obtener a partir del texto.\nEl recuento de palabras también puede ser importante para definir las velocidades de lectura y escritura. El contador de palabras te ayudará a determinar ambas. Basta con establecer el cronómetro y comenzar a escribir. Cuando se acabe el tiempo, podrás saber de manera instantánea cuántas palabras has escrito durante ese período de tiempo.";
 }

@@ -19,7 +19,8 @@
         </div>
         <div class="recuadro">
 
-            <textarea name="recolectorDatos" id="textoIngresado" class="areatexto" cols="10" rows="15">Escriba o inserte su texto para así poder contar las palabras.</textarea><br>
+            <textarea name="recolectorDatos" id="textoIngresado" class="areatexto" cols="10" rows="15">¿Qué es Contador de palabras?
+                Contador de palabras y contador de caracteres es una herramienta que te permite contar la cantidad de palabras o de caracteres que posee un texto. Simplemente, debes posicionar el cursor dentro de la ventana y comenzar a escribir con el teclado. El sistema contará automáticamente la cantidad de palabras y caracteres que has ingresado. También es posible copiar y pegar un texto que hayas escrito fuera del sistema; automáticamente mostrará el recuento de palabras y caracteres del texto copiado.</textarea><br>
         </div>
         <div class="cajaBoton">
             <button type="button" class="btn" onclick="limpiar()">LIMPIAR</button>
@@ -29,18 +30,18 @@
         <br>
         <div class="mostrarResultado">
             <div class="resultado">
-                <table class="tabla">
+                <!-- <table class="tabla">
                     <tr>
-                        <td class="tituloTabla" colspan="2"></td>
+                        <th class="tituloTabla" colspan="2"></th>
                         <h3>El recuento arrojo los siguientes datos:</h3>
                     </tr>
                     <tr>
-                        <td class="descripcionTabla">cantidad de palabras</td>
-                        <td class="resultadoTabla"></td>
+                        <th class="descripcionTabla">cantidad de palabras</th>
+                        <th class="resultadoTabla"></th>
                     </tr>
                     <tr>
-                        <td class="descripcionTabla">cantidad de caracteres</td>
-                        <td class="resultadoTabla"></td>
+                        <th class="descripcionTabla">cantidad de caracteres</th>
+                        <th class="resultadoTabla"></th>
                     </tr>
                     <tr>
                         <td class="descripcionTabla">oraciones</td>
@@ -50,18 +51,18 @@
                         <td class="descripcionTabla">parrafos</td>
                         <td class="resultadoTabla"></td>
                     </tr>
-                </table>
+                </table> -->
                 <br>
-                <table>
-                    <tr>
-                        <td class="tituloTablaPalabra" colspan="2"></td>
-                        <h3>las palabras mas repetidas son:</h3>
-                    </tr>
-                    <tr>
-                        <td class="descripcionTabla"></td>
-                        <td class="resultadoTabla"></td>
-                    </tr>
-                </table>
+                <div class="resultadoRepeticiones">
+                    <table id="tablaXpalabra" class="tabla0">
+                    </table>
+                </div>
+                <div class="resultado2">
+
+                    <table id="tablaXpalabra1" class="tabla0">
+                    </table>
+                </div>
+
 
             </div>
         </div>
