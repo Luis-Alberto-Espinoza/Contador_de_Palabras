@@ -133,6 +133,7 @@ function contarOcurrencia(myArray) {
     for (let i = 0; i < arrayPAnteriores.length; i++) {
         console.log(arrayPAnteriores[i], "-*-*-*-*-*-");
     }
+    /* Se envia el Array para Determinar como será mostrado */
     dividirTablas(arrayPAnteriores);
 }
 
@@ -164,19 +165,24 @@ function dividirTablas(arrayPAnteriores) {
     let elementoPadre;
 
     do {
+        /* En la vuelta = 0 se selecciona la primera mitad de lo que contenga el Array de palabras repetidas */
         if (contador == 0) {
             desde = 0;
             hasta = Math.round(arrayPAnteriores.length / 2);
             elementoPadre = 'tablaXpalabra';
+            /* Si el Array tiene menos de 6 palabras se creará una sola columna para mostrar las palabras repetidas */
             if (arrayPAnteriores.length < 6) {
                 terminado = true;
             }
         } else {
+            /* En la vuelta = 1 se selecciona la segunda mitad de la lista. siendo esta mayor a 5 palabras */
+            /* Esto se hace para darle una clase diferente, para así poder con el estilo flex colocarla al lado  */
             desde = Math.round(arrayPAnteriores.length / 2);
             hasta = arrayPAnteriores.length;
             elementoPadre = 'tablaXpalabra1';
             terminado = true;
         }
+        /* Se envian los datos necesarios para crear los elementos */
         agregarDatos(arrayPAnteriores, desde, hasta, elementoPadre);
         contador++;
     } while (!terminado);
@@ -186,24 +192,27 @@ function dividirTablas(arrayPAnteriores) {
 function agregarDatos(arrayPAnteriores, desde, hasta, elementoPadre) {
     /*https://developer.mozilla.org/es/docs/Web/API/Document_Object_Model/Traversing_an_HTML_table_with_JavaScript_and_DOM_Interfaces */
     /* https://lenguajejs.com/javascript/dom/crear-elementos-dom/ */
+    /* https://developer.mozilla.org/es/docs/Web/API/Document/createDocumentFragment */
+
+    /* Se captura el elemento existente en el DOM, para trabajarlo como padre */
     const mostrarResultados = document.getElementById(elementoPadre);
-    const cuerpoTabla = document.createElement('tBody');
-    let encabezado = document.createElement('tr');
 
-    encabezado.appendChild(creadorCeldas('td', 'classTd', 'PALABRAS'));
-    encabezado.appendChild(creadorCeldas('td', 'classTdC', 'REPETICIONES'));
+    let fragment = document.createDocumentFragment();
+    let filas = document.createElement('tr');
 
-    cuerpoTabla.appendChild(encabezado);
+    /* Se crea el Encabezado de la Lista-Resultado */
+    filas.appendChild(creadorCeldas('td', 'classTd', 'PALABRAS'));
+    filas.appendChild(creadorCeldas('td', 'classTdC', 'REPETICIONES'));
+    fragment.appendChild(filas); //se la agrega al nodo
 
+    /* Se crea el cuerpo de la tabla */
     for (let i = desde; i < hasta; i++) {
-        let fila = document.createElement('tr');
-        fila.appendChild(creadorCeldas('td', 'classTdC', arrayPAnteriores[i].palabra));
-        fila.appendChild(creadorCeldas('td', 'classTdC', arrayPAnteriores[i].cant));
-        cuerpoTabla.appendChild(fila);
+        let elementos = document.createElement('tr');
+        elementos.appendChild(creadorCeldas('td', 'classTd', arrayPAnteriores[i].palabra)); //columna PALABRAS
+        elementos.appendChild(creadorCeldas('td', 'classTdC', arrayPAnteriores[i].cant)); //columna CANTIDAD DE REPETICIONES
+        filas.appendChild(elementos); // se agreaga al nodo
     }
-    mostrarResultados.appendChild(cuerpoTabla);
-
-
+    mostrarResultados.appendChild(fragment); // se agrega todo al nodo PADRE existente en el DOM
 }
 
 function creadorCeldas(elemento, clase, texto) {
