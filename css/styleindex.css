@@ -3,17 +3,32 @@
     margin: 0;
 }
 
+html {
+    height: 100%;
+}
+
 .todo {
     background-color: rgb(136, 136, 172);
     padding: 15px;
+    font-family: "Roboto", sans-serif;
+    max-height: 100%;
 }
 
 .agrupar {
-    display: flex;
+    width: 90%;
+    /* max-width: 1000px; */
+    margin: 20px auto;
+    /* display: flex; */
     display: grid;
+    grid-gap: 20px;
+    /* grid-template-columns: repeat(3, 1fr); */
+    /* grid-template-rows: repeat(4, auto); */
     align-items: center;
     justify-content: center;
+
+
 }
+
 
 .encabezado {
     text-align: center;
@@ -23,10 +38,11 @@
 
 .areatexto {
     margin-top: 10px;
-    height: 120px;
-    font-size: 30px;
+    height: 420px;
+    font-size: 25px;
     width: 1100px;
     background-color: rgb(168, 213, 223);
+    padding: 15px;
 }
 
 .recuadro {
@@ -45,30 +61,64 @@
 }
 
 .resultado {
-    display: flex;
+
     justify-content: center;
 }
 
-.resultadoRepeticiones {
-    display: flex;
+.agrupaResultado {
     display: grid;
-    position: relative;
+    grid-template-columns: 50% 50%;
+}
+
+.mostrarResultado {
+    text-align: center;
+}
+.text-danger{
+    height: 20px;
+}
+
+.cantPalabras {
+    font-size: 35px;
+}
+
+.resultadoRepeticiones {
+
+    display: flex;
     float: left;
+    justify-content: end;
 }
 
 .resultado2 {
+
     display: flex;
-    display: grid;
     position: relative;
     float: left;
+    justify-content: start;
+    align-items: self-start;
 }
 
 .tabla0 {
     padding: 25px;
-    display: grid;
+
+}
+.classTd, .classTdC{
+    font-size: 28px;
+    /* font-weight: bold; */
+    font-weight: 700;
+    padding: 10px;
+}
+.classTd{
+    text-align: end;
+}
+.classTdR {
+    height: 35px;
+    font-size: 28px;
+    color: rgb(12, 3, 21);
+    padding: 5px;
+    text-align: end;
 }
 
-.classTd {
+.classTdCR {
     height: 35px;
     font-size: 28px;
     color: rgb(12, 3, 21);
@@ -76,10 +126,18 @@
     text-align: center;
 }
 
-.classTdC {
-    height: 35px;
-    font-size: 28px;
-    color: rgb(12, 3, 21);
-    padding: 5px;
-    text-align: center;
+@media screen and (max-width: 1140px) {
+    * {
+        height: 100%;
+    }
+
+    .todo {
+        width: 100%;
+
+    }
+
+    .areatexto {
+        background-color: rgb(90, 93, 60);
+        max-height: 100%;
+    }
 }

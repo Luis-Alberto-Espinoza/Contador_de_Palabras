@@ -1,15 +1,29 @@
 let contador = 0;
-// const mostrarResultados = document.getElementById('tablaXpalabra');
-
+// const mostrartablas = document.getElementById('tablaXpalabra');
+function borrarTexto() {
+    let txtarea = document.querySelector("#textoIngresado")
+    txtarea.value = "";
+}
 function contarPalabras() {
-   
+    if (contador != 0) {
+        limpiar();
+    }
+    agregarelEmentos()
     contador++;
     console.log("--------------inicio de ejecucion---------------------");
     /* Seguarda en texto lo que tenga el cuadro de texto */
     let texto = document.getElementById('textoIngresado').value;
 
+
+    if ("" == texto.trim()) {
+        alert("Ingrese su texto")
+
+    }
     const myArray = [];
     var pala;
+    contarCaracteres(texto);
+    contarOraciones(texto);
+    contarParrafos(texto);
 
     /* se manda el texto a validar */
     texto = validarTexto((texto));
@@ -27,6 +41,28 @@ function contarPalabras() {
 
     /* Se imprime por consola la cantidad de palabras */
     console.log("La cantidad de palabras es:", texto.split(' ').length);
+    let cantPalabras
+    if (texto.split(" ") == "") {
+        cantPalabras = 0
+    } else {
+        cantPalabras = texto.split(' ').length;
+    }
+    const padrePrimero = document.getElementById('resultado');
+    const fragment2 = document.createDocumentFragment();
+    const li = document.createElement('li');
+    li.classList.add('cantPalabras');
+    const b = document.createElement('b');
+    b.classList = "amigo"
+    b.textContent = "Cantidad de palabras: ";
+    const span = document.createElement("span");
+    span.classList = ("amigo");
+    span.textContent = cantPalabras;
+    const referenceNode = fragment2.firstChild;
+    li.appendChild(b);
+    li.appendChild(span);
+    fragment2.appendChild(li);
+    // console.log(padrePrimero.firstElementChild, "primer hijo")
+    padrePrimero.prepend(fragment2);
 
     /* Se ordena el Array por orden alfabético, para agrupar las palabras repetidas */
     /* https://desarrolloweb.com/articulos/ordenacion-arrays-javascript-sort */
@@ -42,6 +78,25 @@ function contarPalabras() {
 
     /* se envia el texto para contabilizar la cant de palabras repetidas */
     contarOcurrencia(myArray);
+}
+function contarOraciones(texto) {
+    let cantOraciones = texto.split(". ").length;
+    cantOraciones += texto.split(".\n").length;
+
+    console.log(cantOraciones, "esto viene del metodo Oraciones");
+}
+function contarParrafos(texto) {
+    let cantParrafos = texto.split(".\n").length;
+    console.log(cantParrafos, "esto viene del metodo Parrafos1");
+
+    cantParrafos += texto.split(". \n").length;
+
+    console.log(cantParrafos, "esto viene del metodo Parrafos");
+}
+function contarCaracteres(texto) {
+    texto = texto.trim();
+    let cantCaracteres = texto.split(" ").length;
+    console.log(cantCaracteres, "esto viene del metodo Caracteres");
 }
 
 /* VALIDA EL TEXTO PARA ELIMINARCARACTERES ESPECIALES */
@@ -127,7 +182,7 @@ function contarOcurrencia(myArray) {
         }
         return 1;
     });
-    
+
     /* Se envia el Array para Determinar como será mostrado */
     if (!(arrayPAnteriores.length == 0)) {
         dividirTablas(arrayPAnteriores);
@@ -150,21 +205,17 @@ function estaRepetido(arrayPAnteriores, palabraAnterior) {
         return false;
     }
 }
+function segundoTexto() {
+    document.getElementById('textoIngresado').value = textoPrueba();
+}
 /* Funcion para blanquear el cuadro de texto-text area */
 function limpiar() {
-    document.getElementById('textoIngresado').value = textoPrueba();
-
-    const padre = document.getElementById('tablaXpalabra');
-    const padre1 = document.getElementById('tablaXpalabra1');
-
-    while (padre.firstChild) {
-        padre.removeChild(padre.firstChild);
-        if (padre1.firstChild) {
-            padre1.removeChild(padre1.firstChild);
-
-        }
+    const general = document.getElementById('mostrarResultados');
+    if (!(general.childElementCount == 0)) {
+        general.children[1].remove()
+        general.children[0].remove()
     }
-
+    // segundoTexto();
 }
 
 function dividirTablas(arrayPAnteriores) {
@@ -199,6 +250,42 @@ function dividirTablas(arrayPAnteriores) {
 }
 
 
+function agregarelEmentos(arrayPAnteriores, desde, hasta, elementoPadre) {
+    const padreDiv = document.getElementById('mostrarResultados')
+
+    let fragment = document.createDocumentFragment();
+    let divMostrarResultado //= document.createElement('div');
+    divMostrarResultado = (creadorDeElementos('div', 'resultado', null))
+    divMostrarResultado.id = 'resultado'
+    fragment.appendChild(divMostrarResultado)
+    padreDiv.appendChild(fragment)
+
+
+    let agrupaResultado = (creadorDeElementos('div', 'agrupaResultado', null))
+    agrupaResultado.id = 'agrupaResultado'
+    fragment.appendChild(agrupaResultado)
+    padreDiv.appendChild(fragment)
+
+
+
+    let divTabla1 = (creadorDeElementos('div', ' resultadoRepeticiones', null))
+    fragment.appendChild(divTabla1)
+    agrupaResultado.appendChild(fragment)
+
+    let tabla1 = creadorDeElementos('table', 'tabla0', null)
+    tabla1.id = "tablaXpalabra"
+    fragment.appendChild(tabla1)
+    divTabla1.appendChild(fragment)
+
+    let divTabla2 = (creadorDeElementos('div', 'resultado2', null))
+    fragment.appendChild(divTabla2)
+    agrupaResultado.appendChild(fragment)
+
+    let tabla2 = creadorDeElementos('table', 'tabla0', null)
+    tabla2.id = "tablaXpalabra1"
+    fragment.appendChild(tabla2)
+    divTabla2.appendChild(fragment)
+}
 
 
 function agregarDatos(arrayPAnteriores, desde, hasta, elementoPadre) {
@@ -207,9 +294,7 @@ function agregarDatos(arrayPAnteriores, desde, hasta, elementoPadre) {
     /* https://developer.mozilla.org/es/docs/Web/API/Document/createDocumentFragment */
 
     /* Se captura el elemento existente en el DOM, para trabajarlo como padre */
-    const mostrarResultados = document.getElementById(elementoPadre);
-
-
+    const mostrartablas = document.getElementById(elementoPadre);
     let fragment = document.createDocumentFragment();
     let filas = document.createElement('tr');
 
@@ -217,16 +302,15 @@ function agregarDatos(arrayPAnteriores, desde, hasta, elementoPadre) {
     filas.appendChild(creadorDeElementos('td', 'classTd', 'PALABRAS'));
     filas.appendChild(creadorDeElementos('td', 'classTdC', 'REPETICIONES'));
     fragment.appendChild(filas); //se la agrega al nodo
-    mostrarResultados.appendChild(fragment); // se agrega todo al nodo PADRE existente en el DOM
 
     /* Se crea el cuerpo de la tabla */
     for (let i = desde; i < hasta; i++) {
         let elementos = document.createElement('tr');
-        elementos.appendChild(creadorDeElementos('td', 'classTd', arrayPAnteriores[i].palabra)); //columna PALABRAS
-        elementos.appendChild(creadorDeElementos('td', 'classTdC', arrayPAnteriores[i].cant)); //columna CANTIDAD DE REPETICIONES
-        filas.appendChild(elementos); // se agreaga al nodo
+        elementos.appendChild(creadorDeElementos('td', 'classTdR', arrayPAnteriores[i].palabra)); //columna PALABRAS
+        elementos.appendChild(creadorDeElementos('td', 'classTdCR', arrayPAnteriores[i].cant)); //columna CANTIDAD DE REPETICIONES
+        fragment.appendChild(elementos); // se agreaga al nodo
     }
-    mostrarResultados.appendChild(fragment); // se agrega todo al nodo PADRE existente en el DOM
+    mostrartablas.appendChild(fragment); // se agrega todo al nodo PADRE existente en el DOM
 }
 
 function creadorDeElementos(elemento, clase, texto) {
@@ -238,10 +322,13 @@ function creadorDeElementos(elemento, clase, texto) {
 
 
 function textoPrueba() {
-    let escrito = "¿Qué es Contador de palabras?\n    Contador de palabras y contador de caracteres es una herramienta que te permite contar la cantidad de palabras o de caracteres que posee un texto.";
-    return escrito;
+    let escrito = "¿Qué es Contador de palabras?.\n    Contador de palabras y contador de caracteres es una herramienta que te permite contar la cantidad de palabras o de caracteres que posee un texto.";
+    let escrito2 = '¿Qué es Contador de palabras?.\n    Contador de palabras y contador de caracteres es una herramienta que te permite contar la cantidad de palabras o de caracteres que posee un texto. \nSimplemente, debes posicionar el cursor dentro de la ventana y comenzar a escribir con el teclado.\nEl sistema contará automáticamente la cantidad de palabras y caracteres que has ingresado. \nTambién es posible copiar y pegar un texto que hayas escrito fuera del sistema; automáticamente mostrará el recuento de palabras y caracteres del texto copiado.'
     // let escrito = "¿Qué es Contador de palabras?\n    Contador de palabras y contador de caracteres es una herramienta que te permite contar la cantidad de palabras o de caracteres que posee un texto. Simplemente, debes posicionar el cursor dentro de la ventana y comenzar a escribir con el teclado. El sistema contará automáticamente la cantidad de palabras y caracteres que has ingresado. También es posible copiar y pegar un texto que hayas escrito fuera del sistema; automáticamente mostrará el recuento de palabras y caracteres del texto copiado.\n        Además, Contador de palabras y contador de caracteres posee dos botones sobre la derecha de la pantalla, los cuales te permiten borrar y contar, respectivamente. Verás que uno de ellos posee un icono de una papelera con el que podrás borrar todo el contenido de la ventana. El otro, que posee el icono de una flecha, te permite contar palabras y caracteres de lo que hayas escrito.\n        Saber el número de palabras o caracteres de un documento puede ser muy útil. Como ejemplo, si se le pide a un autor un mínimo o un máximo de palabras permitidas para escribir, el contador de palabras lo ayudará a saber si su artículo cumple con los requisitos.\nAdemás, el contador de palabras muestra automáticamente las diez palabras más utilizadas y la densidad de las mismas dentro del artículo que estás escribiendo. Esto te permite saber qué palabras utilizas con más frecuencia y en qué porcentaje las utilizas dentro del artículo. Esto te ayudará a evitar que utilices en exceso ciertas palabras en un texto y te permitirá asegurarte de que la distribución de las palabras clave coincide con lo que estás buscando obtener a partir del texto.\nEl recuento de palabras también puede ser importante para definir las velocidades de lectura y escritura. El contador de palabras te ayudará a determinar ambas. Basta con establecer el cronómetro y comenzar a escribir. Cuando se acabe el tiempo, podrás saber de manera instantánea cuántas palabras has escrito durante ese período de tiempo.";
+
 
     //<!-- ¿Qué es Contador de palabras?
     // Contador de palabras y contador de caracteres es una herramienta que te permite contar la cantidad de palabras o de caracteres que posee un texto. Simplemente, debes posicionar el cursor dentro de la ventana y comenzar a escribir con el teclado. El sistema contará automáticamente la cantidad de palabras y caracteres que has ingresado. También es posible copiar y pegar un texto que hayas escrito fuera del sistema; automáticamente mostrará el recuento de palabras y caracteres del texto copiado. -->
+    return escrito2;
+
 }

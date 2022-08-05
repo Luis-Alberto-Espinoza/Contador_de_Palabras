@@ -6,48 +6,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contador De Palabras</title>
-
     <link rel="stylesheet" href="css/styleindex.css">
     <script src="js/contador_palabra.js"></script>
     <!-- <script src="js/prueba.js"></script> -->
-
 </head>
 
 <body class="todo">
     <div class="agrupar">
         <div class="encabezado">
-
             <H1>CONTADOR DE PALABRAS</H1>
         </div>
         <div class="recuadro">
-
-            <textarea name="recolectorDatos" id="textoIngresado" class="areatexto" cols="10" rows="15">¿Qué es Contador de palabras?
+            <textarea name="recolectorDatos" id="textoIngresado" class="areatexto" cols="50" rows="8"  onmouseover="this.style.borderColor='black';" onmouseout="this.style.borderColor='silver';" onclick="borrarTexto()">¿Qué es Contador de palabras?
                 Contador de palabras y contador de caracteres es una herramienta que te permite contar la cantidad de palabras o de caracteres que posee un texto. Simplemente, debes posicionar el cursor dentro de la ventana y comenzar a escribir con el teclado. El sistema contará automáticamente la cantidad de palabras y caracteres que has ingresado. También es posible copiar y pegar un texto que hayas escrito fuera del sistema; automáticamente mostrará el recuento de palabras y caracteres del texto copiado.</textarea><br>
         </div>
         <div class="cajaBoton">
             <button type="button" class="btn" onclick="limpiar()">LIMPIAR</button>
             <button type="button" class="btn" onclick="contarPalabras()">CONTAR</button>
-
         </div>
-        <br>
-        <div class="mostrarResultado">
-            <div id="resultado" class="resultado">
-                
-                <br>
-                <div class="resultadoRepeticiones">
-                    <table id="tablaXpalabra" class="tabla0">
-                    </table>
-                </div>
-                <div class="resultado2">
-
-                    <table id="tablaXpalabra1" class="tabla0">
-                    </table>
-                </div>
-
-
-            </div>
+        <div class="mostrarResultado" id="mostrarResultados">
         </div>
     </div>
 </body>
-
 </html>
