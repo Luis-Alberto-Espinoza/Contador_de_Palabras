@@ -1,15 +1,10 @@
 let contador = 0;
-// const mostrartablas = document.getElementById('tablaXpalabra');
-function borrarTexto() {
-    let txtarea = document.querySelector("#textoIngresado")
-    txtarea.value = "";
-}
-function contarPalabras() {
-    if (contador != 0) {
-        limpiar();
-    }
+const mostrartablas = document.getElementById('tablaXpalabra');
+
+function inicio() {
+
     agregarelEmentos()
-    contador++;
+
     console.log("--------------inicio de ejecucion---------------------");
     /* Seguarda en texto lo que tenga el cuadro de texto */
     let texto = document.getElementById('textoIngresado').value;
@@ -19,14 +14,14 @@ function contarPalabras() {
         alert("Ingrese su texto")
 
     }
-    const myArray = [];
+    let myArray = [];
     var pala;
-    contarCaracteres(texto);
+    contarPalabras(texto);
     contarOraciones(texto);
     contarParrafos(texto);
 
     /* se manda el texto a validar */
-    texto = validarTexto((texto));
+    texto = validarTexto(texto);
 
     /* Se imprime por consola el texto ya validado */
     console.log(texto);
@@ -42,7 +37,7 @@ function contarPalabras() {
     /* Se imprime por consola la cantidad de palabras */
     console.log("La cantidad de palabras es:", texto.split(' ').length);
     let cantPalabras
-    if (texto.split(" ") == "") {
+    if (texto.trim() === "") {
         cantPalabras = 0
     } else {
         cantPalabras = texto.split(' ').length;
@@ -93,7 +88,7 @@ function contarParrafos(texto) {
 
     console.log(cantParrafos, "esto viene del metodo Parrafos");
 }
-function contarCaracteres(texto) {
+function contarPalabras(texto) {
     texto = texto.trim();
     let cantCaracteres = texto.split(" ").length;
     console.log(cantCaracteres, "esto viene del metodo Caracteres");
@@ -211,11 +206,12 @@ function segundoTexto() {
 /* Funcion para blanquear el cuadro de texto-text area */
 function limpiar() {
     const general = document.getElementById('mostrarResultados');
+    const cuadroTexto = document.getElementById('textoIngresado');
+    cuadroTexto.value="";
     if (!(general.childElementCount == 0)) {
         general.children[1].remove()
         general.children[0].remove()
     }
-    // segundoTexto();
 }
 
 function dividirTablas(arrayPAnteriores) {
@@ -250,7 +246,7 @@ function dividirTablas(arrayPAnteriores) {
 }
 
 
-function agregarelEmentos(arrayPAnteriores, desde, hasta, elementoPadre) {
+function agregarelEmentos() {
     const padreDiv = document.getElementById('mostrarResultados')
 
     let fragment = document.createDocumentFragment();
@@ -294,7 +290,7 @@ function agregarDatos(arrayPAnteriores, desde, hasta, elementoPadre) {
     /* https://developer.mozilla.org/es/docs/Web/API/Document/createDocumentFragment */
 
     /* Se captura el elemento existente en el DOM, para trabajarlo como padre */
-    const mostrartablas = document.getElementById(elementoPadre);
+    let mostrartablas = document.getElementById(elementoPadre);
     let fragment = document.createDocumentFragment();
     let filas = document.createElement('tr');
 

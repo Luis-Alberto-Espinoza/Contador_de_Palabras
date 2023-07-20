@@ -141,3 +141,12 @@ html {
         max-height: 100%;
     }
 }
+.iconos {
+    height: 35px;
+    padding: 15px;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+}
