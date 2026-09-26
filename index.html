@@ -3,41 +3,85 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contador De Palabras</title>
     <link rel="stylesheet" href="css/styleindex.css">
-    <script src="js/index.js"></script>
-    <!-- <script src="js/prueba.js"></script> -->
+    <script src="js/index.js" defer></script>
+    <script>
+        /* Se aplica el tema antes de dibujar la página, para que no parpadee */
+        try {
+            document.documentElement.dataset.theme = localStorage.getItem('tema') ||
+                (matchMedia('(prefers-color-scheme: dark)').matches ? 'oscuro' : 'claro');
+        } catch (error) { }
+    </script>
 </head>
 
 <body class="todo">
     <div class="agrupar">
         <div class="encabezado">
-            <H1>CONTADOR DE PALABRAS</H1>
+            <h1>CONTADOR DE PALABRAS</h1>
+            <div class="botonesEncabezado">
+                <button type="button" class="btnRedondo" title="Trucos para seleccionar texto"
+                    onclick="document.getElementById('trucos').showModal()">i</button>
+                <button type="button" class="btnRedondo" id="btnTema" onclick="cambiarTema()"></button>
+            </div>
         </div>
         <div class="recuadro">
-            <textarea name="recolectorDatos" id="textoIngresado" class="areatexto" cols="50" rows="8"  onmouseover="this.style.borderColor='black';" onmouseout="this.style.borderColor='silver';" onclick="borrarTexto()">¿Qué es Contador de palabras?
-                Contador de palabras y contador de caracteres es una herramienta que te permite contar la cantidad de palabras o de caracteres que posee un texto. Simplemente, debes posicionar el cursor dentro de la ventana y comenzar a escribir con el teclado. El sistema contará automáticamente la cantidad de palabras y caracteres que has ingresado. También es posible copiar y pegar un texto que hayas escrito fuera del sistema; automáticamente mostrará el recuento de palabras y caracteres del texto copiado.</textarea><br>
+            <textarea name="recolectorDatos" id="textoIngresado" class="areatexto" rows="4"
+                placeholder="Escribí o pegá tu texto acá..."></textarea>
         </div>
         <div class="cajaBoton">
             <button type="button" class="btn" onclick="limpiar()">LIMPIAR</button>
-            <button type="button" class="btn" onclick="inicio()">CONTAR</button>
+            <button type="button" class="btn" onclick="pegarPortapapeles()">PEGAR</button>
+            <button type="button" class="btn btnPrincipal" onclick="inicio()">CONTAR</button>
         </div>
-        <div class="mostrarResultado" id="mostrarResultados">
+        <div class="controlesVoz">
+            <label>Voz
+                <select id="selectorVoz"></select>
+            </label>
+            <label>Velocidad
+                <input type="range" id="velocidad" min="0.5" max="2" step="0.1" value="1">
+                <span id="valorVelocidad">1.0x</span>
+            </label>
         </div>
+        <div class="mostrarResultado" id="mostrarResultados" tabindex="-1"></div>
     </div>
+    <!-- Botones fijos: siempre a mano aunque se haga scroll -->
+    <button type="button" class="btnFijo btnLeerFijo" id="btnLeer" onclick="leerTexto()">LEER</button>
+    <button type="button" class="btnFijo btnSubir" id="btnSubir" title="Volver arriba"
+        onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">↑</button>
+
+    <dialog class="trucos" id="trucos">
+        <div class="trucosContenido">
+            <h2>Trucos para seleccionar texto</h2>
+            <ul>
+                <li><b>Doble click</b> sobre una palabra: la selecciona.</li>
+                <li><b>Doble click</b> en una zona vacía de la caja, o afuera de ella: selecciona todo el texto.</li>
+                <li><b>Triple click</b> sobre un párrafo: lo selecciona completo.</li>
+                <li><b>Ctrl + A</b> con el cursor en la caja: selecciona todo.</li>
+                <li><b>Shift + flechas</b>: amplía la selección letra por letra o línea por línea.</li>
+                <li><b>Ctrl + Shift + flechas</b>: amplía la selección palabra por palabra.</li>
+                <li><b>Shift + Inicio / Fin</b>: selecciona hasta el principio o el final de la línea.</li>
+                <li><b>Ctrl + Shift + Inicio / Fin</b>: selecciona hasta el principio o el final del texto.</li>
+                <li><b>Seleccioná una parte y apretá LEER</b>: lee desde ahí hasta el final del texto.</li>
+            </ul>
+            <form method="dialog">
+                <button class="btn">ENTENDIDO</button>
+            </form>
+        </div>
+    </dialog>
+
+    <footer class="footer">
+        <a href="mailto:espinoza.luis.alberto1981@gmail.com">
+            <img src="ico/gmail.png" alt="Correo electrónico" class="iconos">
+        </a>
+        <a href="https://www.linkedin.com/in/luis-alberto-espinoza/" target="_blank" rel="noopener">
+            <img src="ico/linkedin.png" alt="LinkedIn" class="iconos">
+        </a>
+        <a href="https://github.com/Luis-Alberto-Espinoza" target="_blank" rel="noopener">
+            <img src="ico/logotipo-de-github.png" alt="GitHub" class="iconos">
+        </a>
+    </footer>
 </body>
-<footer class="footer">
-    <a href="mailto:espinoza.luis.alberto1981@gmail.com" target="_blank">
-        <img src="ico/gmail.png" alt="Correo electronico" class="iconos">
-    </a>
-    <a href="https://www.linkedin.com/in/luis-alberto-espinoza/?subject=subject text" target=_blank ">
-        <img src=" ico/linkedin.png " alt=" Linkedin " class=" iconos ">
-    </a>
-    <a href=" https://github.com/Luis-Alberto-Espinoza " target=" _blank ">
-        <img src=" ico/logotipo-de-github.png " alt=" git " class=" iconos ">
-    </a>
-   
-</footer>
+
 </html>

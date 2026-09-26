@@ -1,119 +1,374 @@
 * {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
+}
+
+/* Tema claro (por defecto): arena tostada, bastante apagado para que no encandile,
+   con acento verde azulado */
+:root {
+    --fondo: #b3a68d;
+    --superficie: #bdb097;
+    --caja: #c4b79e;
+    --borde: #998b70;
+    --borde-activo: #245f57;
+    --texto: #2a231b;
+    --texto-suave: #4d4336;
+    --acento: #245f57;
+    --texto-acento: #e3d9c5;
+    --seleccion: rgba(36, 95, 87, 0.25);
+    --boton: #a89a7f;
+    --boton-hover: #9e9075;
+    color-scheme: light;
+}
+
+/* Tema oscuro: bien oscuro, pero con el texto gris claro para bajar el contraste */
+:root[data-theme="oscuro"] {
+    --fondo: #0c0d0f;
+    --superficie: #15171a;
+    --caja: #101113;
+    --borde: #262a30;
+    --borde-activo: #4a6390;
+    --texto: #b4bac2;
+    --texto-suave: #6f7780;
+    --acento: #4a6390;
+    --texto-acento: #d6dae0;
+    --seleccion: rgba(110, 140, 200, 0.22);
+    --boton: #1b1e22;
+    --boton-hover: #23272c;
+    color-scheme: dark;
 }
 
 html {
-    height: 100%;
+    min-height: 100%;
 }
 
 .todo {
-    background-color: rgb(136, 136, 172);
-    padding: 15px;
-    font-family: "Roboto", sans-serif;
-    max-height: 100%;
+    background-color: var(--fondo);
+    color: var(--texto);
+    /* A la derecha queda lugar para el botón LEER fijo */
+    padding: 15px 52px 15px 15px;
+    /* Columna que ocupa al menos toda la pantalla: así el footer queda siempre abajo */
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    font-family: system-ui, "Segoe UI", Roboto, sans-serif;
 }
 
 .agrupar {
-    width: 90%;
-    /* max-width: 1000px; */
-    margin: 20px auto;
-    /* display: flex; */
+    width: 100%;
+    max-width: 1600px;
+    margin: 20px auto 10px;
     display: grid;
+    /* minmax(0, 1fr): que el contenido no estire la columna más que la pantalla */
+    grid-template-columns: minmax(0, 1fr);
+    /* La fila de la caja de texto se queda con todo el espacio libre de la pantalla */
+    grid-template-rows: auto 1fr;
     grid-gap: 20px;
-    /* grid-template-columns: repeat(3, 1fr); */
-    /* grid-template-rows: repeat(4, auto); */
-    align-items: center;
-    justify-content: center;
-
-
+    flex: 1 0 auto;
 }
-
 
 .encabezado {
+    position: relative;
     text-align: center;
-    justify-content: center;
-    background-color: rgb(218, 115, 115);
+    padding: 15px;
+    border-radius: 8px;
+    background-color: var(--superficie);
+    border: 1px solid var(--borde);
+    letter-spacing: 2px;
 }
 
-.areatexto {
-    margin-top: 10px;
-    height: 420px;
-    font-size: 25px;
-    width: 1100px;
-    background-color: rgb(168, 213, 223);
-    padding: 15px;
+.botonesEncabezado {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 8px;
+}
+
+.btnRedondo {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    color: var(--texto);
+    background-color: var(--boton);
+    border: 1px solid var(--borde);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.btnRedondo:hover {
+    background-color: var(--boton-hover);
 }
 
 .recuadro {
-    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
-.btn {
-    margin-top: 10px;
-    font-size: 32px;
+.areatexto {
+    display: block;
+    width: 100%;
+    /* Llena el espacio libre hasta el footer; con mucho texto crece más (lo maneja el JS) */
+    flex: 1 0 auto;
+    min-height: max(140px, 26vh);
+    font-size: 22px;
+    line-height: 1.5;
+    font-family: inherit;
+    color: var(--texto);
+    background-color: var(--caja);
+    border: 1px solid var(--borde);
+    border-radius: 8px;
     padding: 15px;
-    background-color: rgb(97, 77, 56);
+    resize: vertical;
+    overflow: hidden;
+}
+
+.areatexto:hover,
+.areatexto:focus {
+    border-color: var(--borde-activo);
+    outline: none;
+}
+
+.areatexto::placeholder {
+    color: var(--texto-suave);
+}
+
+.areatexto::selection {
+    background-color: var(--seleccion);
+    color: inherit;
 }
 
 .cajaBoton {
-    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
 }
 
-.resultado {
+.btn {
+    font-family: inherit;
+    font-size: 24px;
+    padding: 12px 24px;
+    color: var(--texto);
+    background-color: var(--boton);
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    cursor: pointer;
+}
 
+.btn:hover {
+    background-color: var(--boton-hover);
+}
+
+.btnPrincipal {
+    background-color: var(--acento);
+    border-color: var(--acento);
+    color: var(--texto-acento);
+}
+
+.btnPrincipal:hover {
+    filter: brightness(1.1);
+    background-color: var(--acento);
+}
+
+.controlesVoz {
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
+    gap: 12px 30px;
+    color: var(--texto-suave);
+    font-size: 16px;
+}
+
+.controlesVoz label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.controlesVoz select {
+    max-width: 260px;
+    padding: 6px 8px;
+    font: inherit;
+    color: var(--texto);
+    background-color: var(--boton);
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+}
+
+.controlesVoz input[type="range"] {
+    accent-color: var(--acento);
+}
+
+#valorVelocidad {
+    min-width: 3ch;
+    color: var(--texto);
 }
 
 .agrupaResultado {
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 1fr 1fr;
+}
+
+/* Sin resultados no ocupa lugar (si no, deja un hueco extra antes del footer) */
+.mostrarResultado:empty {
+    display: none;
 }
 
 .mostrarResultado {
+    /* Recibe el foco al contar, pero sin dibujar el recuadro de foco */
+    outline: none;
+    /* Al bajar hasta acá, deja un poco de aire arriba */
+    scroll-margin-top: 15px;
     text-align: center;
 }
-.text-danger{
-    height: 20px;
+
+.estadisticas {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
 }
 
-.cantPalabras {
-    font-size: 35px;
+.estadistica {
+    display: flex;
+    flex-direction: column;
+    min-width: 130px;
+    padding: 12px 18px;
+    background-color: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+}
+
+.valorEstadistica {
+    font-size: 34px;
+    font-weight: 700;
+}
+
+.nombreEstadistica {
+    font-size: 15px;
+    color: var(--texto-suave);
+}
+
+/* Botones fijos en el margen derecho */
+.btnFijo {
+    position: fixed;
+    right: 15px;
+    z-index: 10;
+    font: inherit;
+    font-weight: 700;
+    color: var(--texto-acento);
+    background-color: var(--acento);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.btnFijo:hover {
+    filter: brightness(1.1);
+}
+
+/* Angosto y alto, con una letra arriba de la otra, para no comerle espacio a la caja */
+.btnLeerFijo {
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    width: 36px;
+    padding: 14px 0;
+    font-size: 16px;
+    line-height: 1.15;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: 2px;
+    border-radius: 8px;
+}
+
+.btnSubir {
+    bottom: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+.btnSubir.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Ventana de trucos */
+.trucos {
+    margin: auto;
+    padding: 0;
+    max-width: min(560px, calc(100% - 32px));
+    color: var(--texto);
+    background-color: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+}
+
+.trucos::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.trucosContenido {
+    padding: 22px 26px;
+}
+
+.trucos h2 {
+    font-size: 22px;
+    margin-bottom: 14px;
+}
+
+.trucos ul {
+    padding-left: 20px;
+    line-height: 1.6;
+}
+
+.trucos form {
+    margin-top: 18px;
+    text-align: right;
 }
 
 .resultadoRepeticiones {
-
     display: flex;
-    float: left;
     justify-content: end;
 }
 
 .resultado2 {
-
     display: flex;
-    position: relative;
-    float: left;
     justify-content: start;
     align-items: self-start;
 }
 
 .tabla0 {
     padding: 25px;
-
 }
-.classTd, .classTdC{
+
+.classTd, .classTdC {
     font-size: 28px;
-    /* font-weight: bold; */
     font-weight: 700;
     padding: 10px;
+    color: var(--acento);
 }
-.classTd{
+
+.classTd {
     text-align: end;
 }
+
 .classTdR {
     height: 35px;
     font-size: 28px;
-    color: rgb(12, 3, 21);
+    color: var(--texto);
     padding: 5px;
     text-align: end;
 }
@@ -121,32 +376,80 @@ html {
 .classTdCR {
     height: 35px;
     font-size: 28px;
-    color: rgb(12, 3, 21);
+    color: var(--texto-suave);
     padding: 5px;
     text-align: center;
 }
 
-@media screen and (max-width: 1140px) {
-    * {
-        height: 100%;
+@media screen and (max-width: 700px) {
+    .agrupar {
+        width: 100%;
     }
 
+    /* Lugar para que los botones fijos no tapen el footer */
     .todo {
-        width: 100%;
+        padding: 15px 15px 90px;
+    }
 
+    /* En celular el botón LEER va abajo, al lado del de subir */
+    .btnLeerFijo {
+        top: auto;
+        bottom: 20px;
+        right: 80px;
+        transform: none;
+        width: auto;
+        padding: 0 18px;
+        height: 50px;
+        writing-mode: horizontal-tb;
+        letter-spacing: normal;
     }
 
     .areatexto {
-        background-color: rgb(90, 93, 60);
-        max-height: 100%;
+        font-size: 18px;
+    }
+
+    .btn {
+        font-size: 18px;
+    }
+
+    .encabezado h1 {
+        font-size: 20px;
+        text-align: left;
+        padding-right: 95px;
+    }
+
+    .agrupaResultado {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .tabla0 {
+        padding: 10px;
+    }
+
+    .classTd, .classTdC, .classTdR, .classTdCR {
+        font-size: 20px;
+    }
+
+    .resultadoRepeticiones,
+    .resultado2 {
+        justify-content: center;
     }
 }
+
 .iconos {
     height: 35px;
-    padding: 15px;
+    padding: 8px 15px;
+    box-sizing: content-box;
+}
+
+/* El logo de GitHub es negro: se invierte para que se vea sobre fondo oscuro */
+[data-theme="oscuro"] .iconos[src*="github"] {
+    filter: invert(0.85);
 }
 
 .footer {
     display: flex;
     justify-content: center;
+    /* Empuja el footer al final cuando el contenido es más corto que la pantalla */
+    margin-top: auto;
 }
