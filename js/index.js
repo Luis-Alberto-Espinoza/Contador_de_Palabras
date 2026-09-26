@@ -1,7 +1,7 @@
 let contador = 0;
 const mostrartablas = document.getElementById('tablaXpalabra');
 
-function inicio() {
+function inicio(desplazar = true) {
 
     console.log("--------------inicio de ejecucion---------------------");
     /* Seguarda en texto lo que tenga el cuadro de texto */
@@ -61,14 +61,34 @@ function inicio() {
         return 1;
     });
 
+    /* Si está tildado, la tabla de repetidas no muestra "de", "la", "que"... */
+    if (document.getElementById('ignorarComunes').checked) {
+        myArray = myArray.filter(elemento => !PALABRAS_COMUNES.has(elemento.pala));
+    }
+
     /* se envia el texto para contabilizar la cant de palabras repetidas */
     contarOcurrencia(myArray);
+    actualizarResaltado();
 
     /* Se lleva la vista (y el foco) a los resultados para que queden a la vista */
-    const resultados = document.getElementById('mostrarResultados');
-    resultados.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    resultados.focus({ preventScroll: true });
+    if (desplazar) {
+        const resultados = document.getElementById('mostrarResultados');
+        resultados.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        resultados.focus({ preventScroll: true });
+    }
 }
+
+/* Palabras muy frecuentes en español que no aportan al buscar repeticiones */
+const PALABRAS_COMUNES = new Set([
+    'a', 'al', 'algo', 'algunas', 'algunos', 'ante', 'antes', 'como', 'con', 'contra', 'cual',
+    'cuando', 'de', 'del', 'desde', 'donde', 'durante', 'e', 'el', 'él', 'ella', 'ellas', 'ellos',
+    'en', 'entre', 'era', 'es', 'esa', 'esas', 'ese', 'eso', 'esos', 'esta', 'está', 'estas',
+    'este', 'esto', 'estos', 'fue', 'ha', 'han', 'hasta', 'hay', 'la', 'las', 'le', 'les', 'lo',
+    'los', 'me', 'mi', 'mí', 'mis', 'muy', 'más', 'ni', 'no', 'nos', 'o', 'os', 'otra', 'otras',
+    'otro', 'otros', 'para', 'pero', 'por', 'porque', 'que', 'qué', 'quien', 'quienes', 'se',
+    'ser', 'si', 'sí', 'sin', 'sobre', 'son', 'su', 'sus', 'también', 'te', 'ti', 'tu', 'tú',
+    'tus', 'u', 'un', 'una', 'uno', 'unos', 'unas', 'y', 'ya', 'yo'
+]);
 /* Muestra cada dato del texto en una tarjeta, arriba de las tablas */
 function mostrarEstadisticas(datos) {
     const lista = creadorDeElementos('ul', 'estadisticas', '');
@@ -193,6 +213,8 @@ function limpiar() {
     const cuadroTexto = document.getElementById('textoIngresado');
     /* Se deja todo como al abrir la página */
     cuadroTexto.value="";
+    palabraResaltada = null;
+    actualizarResaltado();
     ajustarAltura();
     terminarLectura();
     general.replaceChildren();
@@ -288,6 +310,8 @@ function agregarDatos(arrayPAnteriores, desde, hasta, elementoPadre) {
     /* Se crea el cuerpo de la tabla */
     for (let i = desde; i < hasta; i++) {
         let elementos = document.createElement('tr');
+        elementos.className = 'filaPalabra';
+        elementos.title = 'Click para resaltarla en el texto';
         elementos.appendChild(creadorDeElementos('td', 'classTdR', arrayPAnteriores[i].palabra)); //columna PALABRAS
         elementos.appendChild(creadorDeElementos('td', 'classTdCR', arrayPAnteriores[i].cant)); //columna CANTIDAD DE REPETICIONES
         fragment.appendChild(elementos); // se agreaga al nodo
@@ -397,6 +421,7 @@ async function pegarPortapapeles() {
         const texto = await navigator.clipboard.readText();
         terminarLectura();
         document.getElementById('textoIngresado').value = texto;
+        actualizarResaltado();
         ajustarAltura();
     } catch (error) {
         alert("No se pudo leer el portapapeles (permiso denegado). Usá Ctrl+V.");
@@ -602,6 +627,7 @@ function mostrarOracionEnPantalla(cuadroTexto, posicion) {
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('textoIngresado').addEventListener('input', () => {
         ajustarAltura();
+        actualizarResaltado();
         /* Si se edita el texto, las posiciones de la lectura ya no sirven */
         if (leyendo || posicionPausa !== null) {
             terminarLectura();
@@ -609,6 +635,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.addEventListener('dblclick', seleccionarTodoConDobleClick);
     window.addEventListener('resize', ajustarAltura);
+    document.addEventListener('keydown', atajosDeTeclado);
+
+    /* Click en una fila de la tabla de repetidas: resalta esa palabra en el texto */
+    document.getElementById('mostrarResultados').addEventListener('click', (evento) => {
+        const fila = evento.target.closest('.filaPalabra');
+        if (fila) {
+            resaltarPalabra(fila.querySelector('.classTdR').textContent);
+        }
+    });
+
+    /* Palabras comunes: se recuerda la opción y, si ya hay resultados, se recalculan */
+    const ignorarComunes = document.getElementById('ignorarComunes');
+    ignorarComunes.checked = leerPreferencia('ignorarComunes') !== 'no';
+    ignorarComunes.addEventListener('change', () => {
+        guardarPreferencia('ignorarComunes', ignorarComunes.checked ? 'si' : 'no');
+        if (document.getElementById('mostrarResultados').childElementCount > 0) {
+            inicio(false);
+        }
+    });
 
     /* El botón de subir aparece solo cuando se bajó un poco */
     const btnSubir = document.getElementById('btnSubir');
@@ -647,3 +692,69 @@ document.addEventListener('DOMContentLoaded', () => {
         speechSynthesis.addEventListener('voiceschanged', cargarVoces);
     }
 });
+
+/* RESALTAR TODAS LAS APARICIONES DE UNA PALABRA */
+/* Un textarea no puede pintar partes de su texto, así que detrás de la caja hay un div
+   con el mismo texto y las mismas medidas, donde las apariciones van dentro de <mark>.
+   La caja tiene fondo transparente, y así se ven las marcas "a través" de ella */
+let palabraResaltada = null;
+
+function resaltarPalabra(palabra) {
+    /* Click en la misma palabra: se apaga el resaltado */
+    palabraResaltada = palabraResaltada === palabra ? null : palabra;
+    const posiciones = actualizarResaltado();
+    if (posiciones.length > 0) {
+        mostrarOracionEnPantalla(document.getElementById('textoIngresado'), posiciones[0]);
+    }
+}
+
+/* Redibuja las marcas (se llama también al editar el texto). Devuelve dónde están */
+function actualizarResaltado() {
+    const cuadroTexto = document.getElementById('textoIngresado');
+    const fondo = document.getElementById('fondoResaltado');
+    const texto = cuadroTexto.value;
+    const posiciones = [];
+    const fragment = document.createDocumentFragment();
+    let ultimo = 0;
+
+    if (palabraResaltada !== null) {
+        /* Misma definición de palabra que al contar, comparando en minúscula */
+        for (const encontrada of texto.matchAll(/[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu)) {
+            if (encontrada[0].toLowerCase() === palabraResaltada) {
+                fragment.append(texto.slice(ultimo, encontrada.index));
+                fragment.appendChild(creadorDeElementos('mark', 'marca', encontrada[0]));
+                ultimo = encontrada.index + encontrada[0].length;
+                posiciones.push(encontrada.index);
+            }
+        }
+    }
+    /* El espacio final hace que un salto de línea al final también ocupe su renglón */
+    fragment.append(texto.slice(ultimo) + ' ');
+    fondo.replaceChildren(fragment);
+
+    /* En la tabla se marca la fila de la palabra elegida */
+    document.querySelectorAll('.filaPalabra').forEach(fila => {
+        fila.classList.toggle('filaElegida', fila.querySelector('.classTdR').textContent === palabraResaltada);
+    });
+    return posiciones;
+}
+
+/* ATAJOS DE TECLADO */
+function atajosDeTeclado(evento) {
+    /* Ctrl + Enter: contar */
+    if (evento.ctrlKey && evento.key === 'Enter') {
+        evento.preventDefault();
+        inicio();
+    /* Alt + L: leer / pausar / seguir */
+    } else if (evento.altKey && !evento.ctrlKey && evento.key.toLowerCase() === 'l') {
+        evento.preventDefault();
+        leerTexto();
+    /* Esc: pausar la lectura (si la ventana de trucos está abierta, la cierra ella sola) */
+    } else if (evento.key === 'Escape' && leyendo) {
+        pausarLectura();
+    /* Alt + R: quitar el resaltado de palabras */
+    } else if (evento.altKey && !evento.ctrlKey && evento.key.toLowerCase() === 'r' && palabraResaltada !== null) {
+        evento.preventDefault();
+        resaltarPalabra(palabraResaltada);
+    }
+}

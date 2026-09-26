@@ -21,12 +21,14 @@
         <div class="encabezado">
             <h1>CONTADOR DE PALABRAS</h1>
             <div class="botonesEncabezado">
-                <button type="button" class="btnRedondo" title="Trucos para seleccionar texto"
+                <button type="button" class="btnRedondo" title="Atajos y trucos"
                     onclick="document.getElementById('trucos').showModal()">i</button>
                 <button type="button" class="btnRedondo" id="btnTema" onclick="cambiarTema()"></button>
             </div>
         </div>
         <div class="recuadro">
+            <!-- Detrás de la caja: copia del texto donde se pintan las palabras resaltadas -->
+            <div class="fondoResaltado" id="fondoResaltado" aria-hidden="true"></div>
             <textarea name="recolectorDatos" id="textoIngresado" class="areatexto" rows="4"
                 placeholder="Escribí o pegá tu texto acá..."></textarea>
         </div>
@@ -43,6 +45,10 @@
                 <input type="range" id="velocidad" min="0.5" max="2" step="0.1" value="1">
                 <span id="valorVelocidad">1.0x</span>
             </label>
+            <label title="La tabla de repetidas no muestra de, la, que, el, en...">
+                <input type="checkbox" id="ignorarComunes" checked>
+                Ignorar palabras comunes
+            </label>
         </div>
         <div class="mostrarResultado" id="mostrarResultados" tabindex="-1"></div>
     </div>
@@ -53,6 +59,18 @@
 
     <dialog class="trucos" id="trucos">
         <div class="trucosContenido">
+            <h2>Atajos de teclado</h2>
+            <ul>
+                <li><b>Ctrl + Enter</b>: contar.</li>
+                <li><b>Alt + L</b>: leer, pausar y seguir.</li>
+                <li><b>Esc</b>: pausar la lectura.</li>
+                <li><b>Alt + R</b>: quitar el resaltado de palabras.</li>
+            </ul>
+            <h2>Resultados</h2>
+            <ul>
+                <li><b>Click en una palabra de la tabla</b>: la resalta en todo el texto. Otro click la apaga.</li>
+                <li><b>Ignorar palabras comunes</b>: saca de la tabla "de", "la", "que", "el"... para ver las repeticiones que importan.</li>
+            </ul>
             <h2>Trucos para seleccionar texto</h2>
             <ul>
                 <li><b>Doble click</b> sobre una palabra: la selecciona.</li>
