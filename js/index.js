@@ -412,19 +412,45 @@ function leerPreferencia(clave) {
 
 /* REEMPLAZA EL TEXTO DE LA CAJA POR LO QUE HAYA EN EL PORTAPAPELES */
 /* https://developer.mozilla.org/es/docs/Web/API/Clipboard/readText */
-async function pegarPortapapeles() {
+/* Reemplaza el texto de la caja por el del portapapeles. Devuelve si lo pudo hacer.
+   Con avisar = false no muestra alertas (lo usa el atajo Ctrl + Q) */
+async function pegarPortapapeles(avisar = true) {
     if (!navigator.clipboard || !navigator.clipboard.readText) {
-        alert("Tu navegador no permite leer el portapapeles. Usá Ctrl+V.");
-        return;
+        if (avisar) {
+            alert("Tu navegador no permite leer el portapapeles. Usá Ctrl+V.");
+        }
+        return false;
     }
     try {
         const texto = await navigator.clipboard.readText();
+        /* Con el portapapeles vacío no se borra lo que ya estaba */
+        if (texto.trim() === "") {
+            return false;
+        }
         terminarLectura();
-        document.getElementById('textoIngresado').value = texto;
+        const cuadroTexto = document.getElementById('textoIngresado');
+        cuadroTexto.value = texto;
+        cuadroTexto.setSelectionRange(0, 0);
         actualizarResaltado();
         ajustarAltura();
+        return true;
     } catch (error) {
-        alert("No se pudo leer el portapapeles (permiso denegado). Usá Ctrl+V.");
+        if (avisar) {
+            alert("No se pudo leer el portapapeles (permiso denegado). Usá Ctrl+V.");
+        }
+        return false;
+    }
+}
+
+/* Ctrl + Q: trae el texto del portapapeles a la caja, con el cursor adentro.
+   Si el navegador no deja leer el portapapeles, deja todo seleccionado: Ctrl + V lo reemplaza */
+async function traerTextoNuevo() {
+    const cuadroTexto = document.getElementById('textoIngresado');
+    cuadroTexto.focus();
+    if (await pegarPortapapeles(false)) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        cuadroTexto.select();
     }
 }
 
@@ -501,6 +527,12 @@ function leerTexto() {
     } else if (posicionPausa !== null) {
         desde = posicionPausa;
     }
+    leerDesde(desde);
+}
+
+/* Arranca la lectura en una posición del texto */
+function leerDesde(desde) {
+    const cuadroTexto = document.getElementById('textoIngresado');
 
     /* Se divide en oraciones (la voz de Google corta los textos largos)
        y se descartan las que quedan antes del punto de inicio */
@@ -575,6 +607,43 @@ function pausarLectura() {
     lecturaId++;
     speechSynthesis.cancel();
     document.getElementById('btnLeer').textContent = "SEGUIR";
+}
+
+/* AVANZAR / RETROCEDER: salta a la oración siguiente (paso = 1) o a la anterior (paso = -1).
+   Leyendo, sigue leyendo desde ahí. Si no, la deja marcada para que LEER empiece en ella */
+function saltarOracion(paso) {
+    const cuadroTexto = document.getElementById('textoIngresado');
+    const todas = dividirEnOraciones(cuadroTexto.value)
+        .filter(o => /[\p{L}\p{N}]/u.test(o[0]))
+        .map(o => ({ inicio: o.index, fin: o.index + o[0].length }));
+    if (todas.length === 0) {
+        return;
+    }
+
+    /* Dónde estamos: la oración que se lee, la pausada, o donde está el cursor */
+    let posicion = cuadroTexto.selectionStart;
+    if (leyendo) {
+        posicion = oraciones[oracionActual].inicio;
+    } else if (posicionPausa !== null) {
+        posicion = posicionPausa;
+    }
+    let actual = todas.findIndex(o => o.fin > posicion);
+    if (actual === -1) {
+        actual = todas.length;
+    }
+    const destino = todas[Math.min(Math.max(actual + paso, 0), todas.length - 1)];
+
+    if (leyendo) {
+        lecturaId++;
+        speechSynthesis.cancel();
+        leerDesde(destino.inicio);
+    } else {
+        posicionPausa = destino.inicio;
+        cuadroTexto.focus({ preventScroll: true });
+        cuadroTexto.setSelectionRange(destino.inicio, destino.fin);
+        mostrarOracionEnPantalla(cuadroTexto, destino.inicio);
+        document.getElementById('btnLeer').textContent = "SEGUIR";
+    }
 }
 
 /* Corta la lectura del todo y olvida la pausa */
@@ -745,10 +814,15 @@ function atajosDeTeclado(evento) {
     if (evento.ctrlKey && evento.key === 'Enter') {
         evento.preventDefault();
         inicio();
-    /* Alt + L: leer / pausar / seguir */
-    } else if (evento.altKey && !evento.ctrlKey && evento.key.toLowerCase() === 'l') {
+    /* Alt + L o Ctrl + B: leer / pausar / seguir */
+    } else if ((evento.altKey && !evento.ctrlKey && evento.key.toLowerCase() === 'l') ||
+        (evento.ctrlKey && !evento.shiftKey && !evento.altKey && evento.key.toLowerCase() === 'b')) {
         evento.preventDefault();
         leerTexto();
+    /* Ctrl + Q: reemplazar el texto por el del portapapeles */
+    } else if (evento.ctrlKey && !evento.shiftKey && evento.key.toLowerCase() === 'q') {
+        evento.preventDefault();
+        traerTextoNuevo();
     /* Esc: pausar la lectura (si la ventana de trucos está abierta, la cierra ella sola) */
     } else if (evento.key === 'Escape' && leyendo) {
         pausarLectura();

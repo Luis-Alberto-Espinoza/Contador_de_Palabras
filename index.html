@@ -53,7 +53,13 @@
         <div class="mostrarResultado" id="mostrarResultados" tabindex="-1"></div>
     </div>
     <!-- Botones fijos: siempre a mano aunque se haga scroll -->
-    <button type="button" class="btnFijo btnLeerFijo" id="btnLeer" onclick="leerTexto()">LEER</button>
+    <div class="columnaLectura">
+        <button type="button" class="btnFijo btnSaltar" title="Oración anterior"
+            onclick="saltarOracion(-1)">▲</button>
+        <button type="button" class="btnFijo btnLeerFijo" id="btnLeer" onclick="leerTexto()">LEER</button>
+        <button type="button" class="btnFijo btnSaltar" title="Oración siguiente"
+            onclick="saltarOracion(1)">▼</button>
+    </div>
     <button type="button" class="btnFijo btnSubir" id="btnSubir" title="Volver arriba"
         onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">↑</button>
 
@@ -62,7 +68,9 @@
             <h2>Atajos de teclado</h2>
             <ul>
                 <li><b>Ctrl + Enter</b>: contar.</li>
-                <li><b>Alt + L</b>: leer, pausar y seguir.</li>
+                <li><b>Alt + L</b> o <b>Ctrl + B</b>: leer, pausar y seguir.</li>
+                <li><b>Ctrl + Q</b>: reemplazar el texto de la caja por el que copiaste (como PEGAR).</li>
+                <li><b>▲ / ▼</b> al lado de LEER: ir a la oración anterior o siguiente.</li>
                 <li><b>Esc</b>: pausar la lectura.</li>
                 <li><b>Alt + R</b>: quitar el resaltado de palabras.</li>
             </ul>

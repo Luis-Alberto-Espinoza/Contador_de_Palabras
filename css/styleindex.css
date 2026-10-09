@@ -304,11 +304,33 @@ html {
     filter: brightness(1.1);
 }
 
-/* Angosto y alto, con una letra arriba de la otra, para no comerle espacio a la caja */
-.btnLeerFijo {
+/* Columna en el margen derecho: anterior arriba, LEER al medio, siguiente abajo */
+.columnaLectura {
+    position: fixed;
     top: 50%;
     right: 8px;
     transform: translateY(-50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Dentro de la columna los botones dejan de ser fijos: la columna ya lo es */
+.columnaLectura .btnFijo {
+    position: static;
+}
+
+.btnSaltar {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+/* Angosto y alto, con una letra arriba de la otra, para no comerle espacio a la caja */
+.btnLeerFijo {
     width: 36px;
     padding: 14px 0;
     font-size: 16px;
@@ -459,12 +481,21 @@ html {
         padding: 15px 15px 90px;
     }
 
-    /* En celular el botón LEER va abajo, al lado del de subir */
-    .btnLeerFijo {
+    /* En celular los botones de lectura van abajo, en fila, al lado del de subir */
+    .columnaLectura {
         top: auto;
         bottom: 20px;
         right: 80px;
         transform: none;
+        flex-direction: row;
+    }
+
+    .btnSaltar {
+        width: 44px;
+        height: 50px;
+    }
+
+    .btnLeerFijo {
         width: auto;
         padding: 0 18px;
         height: 50px;

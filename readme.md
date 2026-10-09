@@ -19,6 +19,7 @@ Este programa empezó como uno de los primeros proyectos desarrollados en respue
 
 ### Lectura en voz alta
 - Botón **LEER** fijo en el margen derecho, siempre a mano. Mientras lee cambia a **PAUSAR**, y en pausa a **SEGUIR**.
+- Botones **▲ / ▼** arriba y abajo de LEER: van a la oración anterior o siguiente. Si está leyendo, sigue desde ahí; si no, la deja marcada para que LEER empiece en ella.
 - La oración que se está leyendo queda marcada y la página se desplaza sola para que siempre quede a la vista.
 - Si se selecciona una parte del texto antes de apretar LEER, lee **desde ahí hasta el final**.
 - Se puede elegir la **voz** y la **velocidad** (de 0.5x a 2x). En Chrome se usa por defecto la voz de Google en español.
@@ -37,7 +38,8 @@ Este programa empezó como uno de los primeros proyectos desarrollados en respue
 | Tecla | Acción |
 |---|---|
 | `Ctrl + Enter` | Contar |
-| `Alt + L` | Leer, pausar y seguir |
+| `Alt + L` o `Ctrl + B` | Leer, pausar y seguir |
+| `Ctrl + Q` | Reemplazar el texto de la caja por el del portapapeles, con el cursor adentro (en Firefox para Linux cierra el navegador) |
 | `Esc` | Pausar la lectura |
 | `Alt + R` | Quitar el resaltado de palabras |
 
